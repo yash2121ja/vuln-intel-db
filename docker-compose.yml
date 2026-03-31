@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL — advisory storage ─────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vulndb
+      POSTGRES_PASSWORD: vulndb_pass
+      POSTGRES_DB: vuln_intel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vulndb -d vuln_intel"]
+      interval: 5s
+      retries: 5
+
+  # ── Redis — query cache + pub/sub for live updates ────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6381:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+
+  # ── API Server — serves vulnerability data ────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://vulndb:vulndb_pass@postgres:5432/vuln_intel
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+    ports:
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Collector Worker — runs feed syncs ────────────────────────
+  collector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://vulndb:vulndb_pass@postgres:5432/vuln_intel
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      NVD_API_KEY: ${NVD_API_KEY:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    command: celery -A src.worker worker -l info -c 4 -Q collectors,celery
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Beat Scheduler — triggers periodic syncs ──────────────────
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://vulndb:vulndb_pass@postgres:5432/vuln_intel
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+    command: celery -A src.worker beat -l info
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  pgdata:

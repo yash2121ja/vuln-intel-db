@@ -1,0 +1,71 @@
+name: Build Vulnerability Database
+
+# Runs every 6 hours — fetches all advisory sources, builds DB, publishes
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:        # Manual trigger
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install httpx packaging
+
+      - name: Build vulnerability database
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/build_db.py
+
+      - name: Show DB stats
+        run: |
+          python -c "
+          import json
+          with open('dist/db-meta.json') as f:
+              meta = json.load(f)
+          print(f'Total advisories: {meta[\"total_advisories\"]:,}')
+          for src, cnt in meta['by_source'].items():
+              print(f'  {src}: {cnt:,}')
+          print(f'Built at: {meta[\"built_at\"]}')
+          "
+
+      - name: Upload DB as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vuln-db
+          path: dist/
+
+      - name: Create/Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: db-latest
+          name: "Vulnerability DB (latest)"
+          body: |
+            Auto-built vulnerability database.
+            Updated every 6 hours from Debian, Alpine, GHSA, CISA KEV, EPSS.
+
+            **Download:** `dscanner db update`
+            **Manual:** Download `vuln-db.json.gz` below
+          files: |
+            dist/vuln-db.json.gz
+            dist/db-meta.json
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
