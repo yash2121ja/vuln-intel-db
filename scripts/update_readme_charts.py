@@ -341,10 +341,10 @@ def patch_readme(meta: dict):
 
 | Severity | Count | Distribution |
 |----------|------:|-------------|
-| \U0001f534 CRITICAL | {sev_data['CRITICAL']:,} | `{"\\u2588" * max(1, int(sev_data['CRITICAL'] / sev_total * 40))}` {sev_data['CRITICAL'] / sev_total:.0%} |
-| \U0001f7e0 HIGH | {sev_data['HIGH']:,} | `{"\\u2588" * max(1, int(sev_data['HIGH'] / sev_total * 40))}` {sev_data['HIGH'] / sev_total:.0%} |
-| \U0001f7e1 MEDIUM | {sev_data['MEDIUM']:,} | `{"\\u2588" * max(1, int(sev_data['MEDIUM'] / sev_total * 40))}` {sev_data['MEDIUM'] / sev_total:.0%} |
-| \U0001f535 LOW | {sev_data['LOW']:,} | `{"\\u2588" * max(1, int(sev_data['LOW'] / sev_total * 40))}` {sev_data['LOW'] / sev_total:.0%} |
+| &#x1F534; CRITICAL | {sev_data['CRITICAL']:,} | `{"\u2588" * max(1, int(sev_data['CRITICAL'] / sev_total * 40))}` {sev_data['CRITICAL'] / sev_total:.0%} |
+| &#x1F7E0; HIGH | {sev_data['HIGH']:,} | `{"\u2588" * max(1, int(sev_data['HIGH'] / sev_total * 40))}` {sev_data['HIGH'] / sev_total:.0%} |
+| &#x1F7E1; MEDIUM | {sev_data['MEDIUM']:,} | `{"\u2588" * max(1, int(sev_data['MEDIUM'] / sev_total * 40))}` {sev_data['MEDIUM'] / sev_total:.0%} |
+| &#x1F535; LOW | {sev_data['LOW']:,} | `{"\u2588" * max(1, int(sev_data['LOW'] / sev_total * 40))}` {sev_data['LOW'] / sev_total:.0%} |
 
 ### Advisories by Source
 
@@ -367,11 +367,12 @@ def patch_readme(meta: dict):
     end_marker = "<!-- AUTOSTATS:END -->"
 
     if start_marker in content:
-        content = re.sub(
-            rf"{re.escape(start_marker)}.*?{re.escape(end_marker)}",
-            f"{start_marker}\n{charts_section}\n{end_marker}",
-            content,
-            flags=re.DOTALL,
+        idx_start = content.index(start_marker)
+        idx_end = content.index(end_marker) + len(end_marker)
+        content = (
+            content[:idx_start]
+            + f"{start_marker}\n{charts_section}\n{end_marker}"
+            + content[idx_end:]
         )
     else:
         # Insert before "## API Endpoints" or "## API"
