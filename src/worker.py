@@ -41,6 +41,12 @@ def sync_ghsa():
     return GhsaCollector().run()
 
 
+@app.task(name="src.worker.sync_nvd")
+def sync_nvd():
+    from src.collectors.nvd import NvdCollector
+    return NvdCollector().run()
+
+
 @app.task(name="src.worker.sync_epss")
 def sync_epss():
     from src.collectors.epss import EpssCollector
@@ -53,6 +59,18 @@ def sync_kev():
     return KevCollector().run()
 
 
+@app.task(name="src.worker.sync_govuln")
+def sync_govuln():
+    from src.collectors.govuln import GoVulnCollector
+    return GoVulnCollector().run()
+
+
+@app.task(name="src.worker.sync_rustsec")
+def sync_rustsec():
+    from src.collectors.rustsec import RustSecCollector
+    return RustSecCollector().run()
+
+
 @app.task(name="src.worker.sync_all")
 def sync_all():
     """Run all collectors sequentially."""
@@ -61,8 +79,11 @@ def sync_all():
         ("debian", sync_debian),
         ("alpine", sync_alpine),
         ("ghsa", sync_ghsa),
+        ("nvd", sync_nvd),
         ("kev", sync_kev),
         ("epss", sync_epss),
+        ("govuln", sync_govuln),
+        ("rustsec", sync_rustsec),
     ]:
         try:
             results[name] = fn()
@@ -86,6 +107,10 @@ app.conf.beat_schedule = {
         "task": "src.worker.sync_ghsa",
         "schedule": crontab(minute=30, hour="*/2"),
     },
+    "sync-nvd": {
+        "task": "src.worker.sync_nvd",
+        "schedule": crontab(minute=45, hour="*/6"),
+    },
     "sync-kev": {
         "task": "src.worker.sync_kev",
         "schedule": crontab(minute=0, hour="*/6"),
@@ -93,5 +118,13 @@ app.conf.beat_schedule = {
     "sync-epss": {
         "task": "src.worker.sync_epss",
         "schedule": crontab(minute=0, hour=4),  # daily at 04:00 UTC
+    },
+    "sync-govuln": {
+        "task": "src.worker.sync_govuln",
+        "schedule": crontab(minute=10, hour="*/4"),
+    },
+    "sync-rustsec": {
+        "task": "src.worker.sync_rustsec",
+        "schedule": crontab(minute=20, hour="*/6"),
     },
 }

@@ -272,8 +272,11 @@ async def trigger_sync(source: str):
         "debian": "src.worker.sync_debian",
         "alpine": "src.worker.sync_alpine",
         "ghsa": "src.worker.sync_ghsa",
+        "nvd": "src.worker.sync_nvd",
         "epss": "src.worker.sync_epss",
         "kev": "src.worker.sync_kev",
+        "go_vuln_db": "src.worker.sync_govuln",
+        "rustsec": "src.worker.sync_rustsec",
         "all": "src.worker.sync_all",
     }
     task_name = task_map.get(source)
