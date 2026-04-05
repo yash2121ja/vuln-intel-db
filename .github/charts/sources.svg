@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="240" viewBox="0 0 480 240" fill="none">
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .title { font-size: 14px; font-weight: 700; fill: #1f2937; }
+  .label { font-size: 11px; fill: #6b7280; }
+  .value { font-size: 11px; font-weight: 600; fill: #374151; }
+  .big-number { font-size: 28px; font-weight: 800; fill: #111827; }
+  .sub { font-size: 10px; fill: #9ca3af; }
+</style>
+<rect width="480" height="240" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+<text x="20" y="28" class="title">Advisories by Source</text>
+<path d="M 120 130 L 120.0 50.0 A 80 80 0 1 1 44.5 103.5 Z" fill="#d70a53" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
+<path d="M 120 130 L 44.5 103.5 A 80 80 0 0 1 120.0 50.0 Z" fill="#0d597f" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
+<circle cx="120" cy="130" r="45" fill="#ffffff"/>
+<text x="120" y="126" text-anchor="middle" class="big-number">243,885</text>
+<text x="120" y="144" text-anchor="middle" class="sub">total</text>
+<rect x="240" y="55" width="12" height="12" rx="2" fill="#d70a53"/>
+<text x="258" y="65" class="label">debian</text>
+<text x="390" y="65" class="value">196,006 (80.4%)</text>
+<rect x="240" y="77" width="12" height="12" rx="2" fill="#0d597f"/>
+<text x="258" y="87" class="label">alpine</text>
+<text x="390" y="87" class="value">47,879 (19.6%)</text>
+</svg>

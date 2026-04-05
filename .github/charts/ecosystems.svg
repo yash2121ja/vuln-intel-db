@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="580" height="78" viewBox="0 0 580 78" fill="none">
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .title { font-size: 14px; font-weight: 700; fill: #1f2937; }
+  .label { font-size: 11px; fill: #6b7280; }
+  .value { font-size: 11px; font-weight: 600; fill: #374151; }
+  .big-number { font-size: 28px; font-weight: 800; fill: #111827; }
+  .sub { font-size: 10px; fill: #9ca3af; }
+</style>
+<rect width="580" height="78" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+<text x="20" y="28" class="title">Top Ecosystems by Advisory Count</text>
+<text x="16" y="64" class="label">no data</text>
+<rect x="160" y="48" width="320" height="24" rx="4" fill="#6366f1" opacity="0.8"/>
+<text x="488" y="64" class="value">1</text>
+</svg>

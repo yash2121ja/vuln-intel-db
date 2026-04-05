@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 DIST = Path("dist")
-CHARTS_DIR = DIST / "charts"
+CHARTS_DIR = Path(".github") / "charts"
 CHARTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Colors ────────────────────────────────────────────────────────────────
@@ -325,7 +325,7 @@ def patch_readme(meta: dict):
 
 > Auto-updated by GitHub Actions on every build.
 
-![Stats](dist/charts/stats.svg)
+![Stats](.github/charts/stats.svg)
 
 ### Summary
 
@@ -356,9 +356,9 @@ def patch_readme(meta: dict):
 | Ecosystem | Advisories | Coverage |
 |-----------|----------:|----------|
 {eco_rows}
-![Sources](dist/charts/sources.svg)
+![Sources](.github/charts/sources.svg)
 
-![Ecosystems](dist/charts/ecosystems.svg)
+![Ecosystems](.github/charts/ecosystems.svg)
 
 """
 
