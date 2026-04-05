@@ -265,6 +265,164 @@ async def health():
     return {"status": "ok", "service": "vulnintel-db", "version": settings.APP_VERSION}
 
 
+# ── Trend & Coverage endpoints ──────────────────────────────────────────
+
+@app.get("/api/v1/trends/daily")
+async def daily_trends(
+    days: int = Query(30, ge=1, le=90),
+    db: AsyncSession = Depends(get_db),
+):
+    """Advisories added per day for the last N days, grouped by severity."""
+    from datetime import timedelta, timezone as tz
+    cutoff = datetime.now(tz.utc) - timedelta(days=days)
+
+    rows = (await db.execute(
+        select(
+            func.date(Advisory.created_at).label("day"),
+            Advisory.severity,
+            func.count(Advisory.id).label("count"),
+        )
+        .where(Advisory.created_at >= cutoff)
+        .group_by("day", Advisory.severity)
+        .order_by("day")
+    )).all()
+
+    # Build day → {severity: count} map
+    day_map: dict[str, dict[str, int]] = {}
+    for day, sev, cnt in rows:
+        d = str(day)
+        if d not in day_map:
+            day_map[d] = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0, "total": 0}
+        if sev and sev.upper() in day_map[d]:
+            day_map[d][sev.upper()] += cnt
+        day_map[d]["total"] += cnt
+
+    # Total summary
+    total_added = sum(v["total"] for v in day_map.values())
+    severity_totals = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0}
+    for v in day_map.values():
+        for s in severity_totals:
+            severity_totals[s] += v[s]
+
+    return {
+        "period_days": days,
+        "total_added": total_added,
+        "severity_totals": severity_totals,
+        "daily": [{"date": d, **v} for d, v in sorted(day_map.items())],
+    }
+
+
+@app.get("/api/v1/trends/sources")
+async def source_trends(
+    days: int = Query(30, ge=1, le=90),
+    db: AsyncSession = Depends(get_db),
+):
+    """Advisories added per source in the last N days."""
+    from datetime import timedelta, timezone as tz
+    cutoff = datetime.now(tz.utc) - timedelta(days=days)
+
+    rows = (await db.execute(
+        select(
+            Advisory.source,
+            func.count(Advisory.id).label("count"),
+        )
+        .where(Advisory.created_at >= cutoff)
+        .group_by(Advisory.source)
+        .order_by(func.count(Advisory.id).desc())
+    )).all()
+
+    return {
+        "period_days": days,
+        "total": sum(c for _, c in rows),
+        "by_source": {s: c for s, c in rows},
+    }
+
+
+@app.get("/api/v1/coverage")
+async def ecosystem_coverage(db: AsyncSession = Depends(get_db)):
+    """Package coverage per ecosystem — how many unique packages have advisories."""
+    eco_stats = (await db.execute(
+        select(
+            Advisory.ecosystem,
+            func.count(Advisory.id).label("total_advisories"),
+            func.count(func.distinct(Advisory.package_name)).label("unique_packages"),
+            func.count(func.distinct(Advisory.cve_id)).label("unique_cves"),
+        )
+        .group_by(Advisory.ecosystem)
+        .order_by(func.count(Advisory.id).desc())
+    )).all()
+
+    severity_by_eco = (await db.execute(
+        select(
+            Advisory.ecosystem,
+            Advisory.severity,
+            func.count(Advisory.id),
+        )
+        .group_by(Advisory.ecosystem, Advisory.severity)
+    )).all()
+
+    sev_map: dict[str, dict[str, int]] = {}
+    for eco, sev, cnt in severity_by_eco:
+        if eco not in sev_map:
+            sev_map[eco] = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0}
+        if sev and sev.upper() in sev_map[eco]:
+            sev_map[eco][sev.upper()] += cnt
+
+    ecosystems = []
+    for eco, total, pkgs, cves in eco_stats:
+        ecosystems.append({
+            "ecosystem": eco,
+            "total_advisories": total,
+            "unique_packages": pkgs,
+            "unique_cves": cves,
+            "severity_breakdown": sev_map.get(eco, {}),
+        })
+
+    return {
+        "total_ecosystems": len(ecosystems),
+        "total_advisories": sum(e["total_advisories"] for e in ecosystems),
+        "total_unique_packages": sum(e["unique_packages"] for e in ecosystems),
+        "ecosystems": ecosystems,
+    }
+
+
+@app.get("/api/v1/trends/top-packages")
+async def top_vulnerable_packages(
+    ecosystem: str = Query(None),
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+):
+    """Packages with the most advisories — shows which packages have the most risk."""
+    query = (
+        select(
+            Advisory.package_name,
+            Advisory.ecosystem,
+            func.count(Advisory.id).label("advisory_count"),
+            func.count(func.distinct(Advisory.cve_id)).label("cve_count"),
+        )
+        .group_by(Advisory.package_name, Advisory.ecosystem)
+        .order_by(func.count(Advisory.id).desc())
+        .limit(limit)
+    )
+    if ecosystem:
+        query = query.where(Advisory.ecosystem == ecosystem)
+
+    rows = (await db.execute(query)).all()
+
+    return {
+        "filter_ecosystem": ecosystem,
+        "packages": [
+            {
+                "package": name,
+                "ecosystem": eco,
+                "advisory_count": adv_cnt,
+                "cve_count": cve_cnt,
+            }
+            for name, eco, adv_cnt, cve_cnt in rows
+        ],
+    }
+
+
 @app.post("/api/v1/sync/{source}")
 async def trigger_sync(source: str):
     """Manually trigger a sync for a specific source."""
