@@ -9,7 +9,7 @@
 </style>
 <rect width="580" height="100" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
 <rect x="16" y="16" width="125" height="68" rx="8" fill="#6366f1" opacity="0.08" stroke="#6366f1" stroke-width="1" stroke-opacity="0.3"/>
-<text x="78" y="48" text-anchor="middle" class="big-number" style="font-size:22px; fill:#6366f1">250,026</text>
+<text x="78" y="48" text-anchor="middle" class="big-number" style="font-size:22px; fill:#6366f1">250,700</text>
 <text x="78" y="68" text-anchor="middle" class="sub">Advisories</text>
 <rect x="153" y="16" width="125" height="68" rx="8" fill="#8b5cf6" opacity="0.08" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.3"/>
 <text x="215" y="48" text-anchor="middle" class="big-number" style="font-size:22px; fill:#8b5cf6">3</text>
@@ -20,5 +20,5 @@
 <rect x="427" y="16" width="125" height="68" rx="8" fill="#dc2626" opacity="0.08" stroke="#dc2626" stroke-width="1" stroke-opacity="0.3"/>
 <text x="489" y="48" text-anchor="middle" class="big-number" style="font-size:22px; fill:#dc2626">0</text>
 <text x="489" y="68" text-anchor="middle" class="sub">KEV (Exploited)</text>
-<text x="564" y="92" text-anchor="end" class="sub">Last updated: Apr 06, 2026 12:20 UTC</text>
+<text x="564" y="92" text-anchor="end" class="sub">Last updated: Apr 06, 2026 18:20 UTC</text>
 </svg>
