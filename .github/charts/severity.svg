@@ -11,14 +11,14 @@
 <text x="20" y="28" class="title">Severity Distribution</text>
 <text x="16" y="70" class="label">CRITICAL</text>
 <rect x="120" y="52" width="23" height="28" rx="4" fill="#dc2626" opacity="0.85"/>
-<text x="151" y="70" class="value">20,320 (8%)</text>
+<text x="151" y="70" class="value">20,321 (8%)</text>
 <text x="16" y="108" class="label">HIGH</text>
 <rect x="120" y="90" width="81" height="28" rx="4" fill="#ea580c" opacity="0.85"/>
-<text x="209" y="108" class="value">68,582 (27%)</text>
+<text x="209" y="108" class="value">68,586 (27%)</text>
 <text x="16" y="146" class="label">MEDIUM</text>
 <rect x="120" y="128" width="126" height="28" rx="4" fill="#ca8a04" opacity="0.85"/>
-<text x="254" y="146" class="value">106,683 (42%)</text>
+<text x="254" y="146" class="value">106,689 (42%)</text>
 <text x="16" y="184" class="label">LOW</text>
 <rect x="120" y="166" width="69" height="28" rx="4" fill="#2563eb" opacity="0.85"/>
-<text x="197" y="184" class="value">58,422 (23%)</text>
+<text x="197" y="184" class="value">58,425 (23%)</text>
 </svg>
