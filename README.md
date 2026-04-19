@@ -61,7 +61,7 @@ docker compose up -d
 | Data Sources | **3** |
 | Ecosystems Covered | **0** |
 | KEV (Actively Exploited) | **0** |
-| Last Updated | Apr 19, 2026 12:13 UTC |
+| Last Updated | Apr 19, 2026 18:14 UTC |
 
 ### Severity Breakdown
 
