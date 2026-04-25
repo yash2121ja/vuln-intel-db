@@ -9,18 +9,18 @@
 </style>
 <rect width="480" height="240" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
 <text x="20" y="28" class="title">Advisories by Source</text>
-<path d="M 120 130 L 120.0 50.0 A 80 80 0 1 1 41.8 113.3 Z" fill="#d70a53" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
-<path d="M 120 130 L 41.8 113.3 A 80 80 0 0 1 106.1 51.2 Z" fill="#0d597f" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
+<path d="M 120 130 L 120.0 50.0 A 80 80 0 1 1 41.8 113.1 Z" fill="#d70a53" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
+<path d="M 120 130 L 41.8 113.1 A 80 80 0 0 1 106.1 51.2 Z" fill="#0d597f" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
 <path d="M 120 130 L 106.1 51.2 A 80 80 0 0 1 120.0 50.0 Z" fill="#6e40c9" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
 <circle cx="120" cy="130" r="45" fill="#ffffff"/>
-<text x="120" y="126" text-anchor="middle" class="big-number">255,511</text>
+<text x="120" y="126" text-anchor="middle" class="big-number">256,090</text>
 <text x="120" y="144" text-anchor="middle" class="sub">total</text>
 <rect x="240" y="55" width="12" height="12" rx="2" fill="#d70a53"/>
 <text x="258" y="65" class="label">debian</text>
-<text x="390" y="65" class="value">200,189 (78.3%)</text>
+<text x="390" y="65" class="value">200,753 (78.4%)</text>
 <rect x="240" y="77" width="12" height="12" rx="2" fill="#0d597f"/>
 <text x="258" y="87" class="label">alpine</text>
-<text x="390" y="87" class="value">48,222 (18.9%)</text>
+<text x="390" y="87" class="value">48,237 (18.8%)</text>
 <rect x="240" y="99" width="12" height="12" rx="2" fill="#6e40c9"/>
 <text x="258" y="109" class="label">ghsa</text>
 <text x="390" y="109" class="value">7,100 (2.8%)</text>
