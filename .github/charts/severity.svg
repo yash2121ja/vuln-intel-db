@@ -17,8 +17,8 @@
 <text x="209" y="108" class="value">73,270 (27%)</text>
 <text x="16" y="146" class="label">MEDIUM</text>
 <rect x="120" y="128" width="126" height="28" rx="4" fill="#ca8a04" opacity="0.85"/>
-<text x="254" y="146" class="value">113,975 (42%)</text>
+<text x="254" y="146" class="value">113,976 (42%)</text>
 <text x="16" y="184" class="label">LOW</text>
-<rect x="120" y="166" width="69" height="28" rx="4" fill="#2563eb" opacity="0.85"/>
-<text x="197" y="184" class="value">62,415 (23%)</text>
+<rect x="120" y="166" width="68" height="28" rx="4" fill="#2563eb" opacity="0.85"/>
+<text x="196" y="184" class="value">62,415 (23%)</text>
 </svg>
