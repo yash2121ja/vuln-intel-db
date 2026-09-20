@@ -57,28 +57,28 @@ docker compose up -d
 
 | Metric | Value |
 |--------|-------|
-| Total Advisories | **242,873** |
+| Total Advisories | **243,294** |
 | Data Sources | **3** |
 | Ecosystems Covered | **0** |
 | KEV (Actively Exploited) | **0** |
-| Last Updated | Sep 19, 2026 19:57 UTC |
+| Last Updated | Sep 20, 2026 03:01 UTC |
 
 ### Severity Breakdown
 
 | Severity | Count | Distribution |
 |----------|------:|-------------|
-| &#x1F534; CRITICAL | 19,429 | `███` 8% |
-| &#x1F7E0; HIGH | 65,575 | `██████████` 27% |
-| &#x1F7E1; MEDIUM | 102,006 | `████████████████` 42% |
-| &#x1F535; LOW | 55,860 | `█████████` 23% |
+| &#x1F534; CRITICAL | 19,463 | `███` 8% |
+| &#x1F7E0; HIGH | 65,689 | `██████████` 27% |
+| &#x1F7E1; MEDIUM | 102,183 | `████████████████` 42% |
+| &#x1F535; LOW | 55,957 | `█████████` 23% |
 
 ### Advisories by Source
 
 | Source | Count | Share |
 |--------|------:|-------|
-| debian | 186,964 | `██████████████████████████████████████` 77.0% |
-| alpine | 49,709 | `██████████` 20.5% |
-| ghsa | 6,200 | `█` 2.6% |
+| debian | 187,385 | `██████████████████████████████████████` 77.0% |
+| alpine | 49,709 | `██████████` 20.4% |
+| ghsa | 6,200 | `█` 2.5% |
 
 ### Top Ecosystems
 
